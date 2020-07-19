@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Cardlist from '../components/Cardlist';
+import ErrorBoundary from '../components/ErrorBoundary'
 import SearchBox from '../components/Searchbox';
 import Scroll from '../components/Scroll';
 
@@ -14,10 +15,10 @@ class App extends Component {
 
     componentDidMount() {
         fetch('https://jsonplaceholder.typicode.com/users')
-        .then((response, error) => response.json())
-        .then(users => this.setState({ robots: users })
-        )
-    }
+          .then(response=> response.json())
+          .then(users => {this.setState({ robots: users})});
+      }
+      
     onSearchChange = (event) => {
         this.setState({searchField: event.target.value});
 
@@ -33,7 +34,9 @@ class App extends Component {
                 <h1 className='f1'>Robofriends</h1>
                 <SearchBox searchchange={this.onSearchChange} />
                 <Scroll>
+                    <ErrorBoundary>
                     <Cardlist robots={filteredRobots} />
+                    </ErrorBoundary>
                 </Scroll>
             </div>
             )
